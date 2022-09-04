@@ -17,7 +17,15 @@ public class UserService {
         this.paymentRepository = paymentRepository;
     }
 
-    public Object createUser(User user) {
+    public Object createUser(UserDto userDto) {
+         User user = new User();
+
+         user.setName(userDto.getUserName());
+         user.setEmail(userDto.getUserEmail());
+         user.setDob(userDto.getUserDob());
+         user.setAddress(userDto.getUserAddress());
+         user.setGender(userDto.getUserGender());
+
          Optional<User> existEmail = userRepository.findByEmail(user.getEmail());
 
          if(existEmail.isPresent()){
@@ -32,7 +40,7 @@ public class UserService {
                 " Address: " +user.getAddress()+
                 " Gender: " +user.getGender()+
                 " Dob: "+user.getDob();*/
-        userResponse.setData(user);
+        userResponse.setData(userDto);
 
          return userResponse;
     }
