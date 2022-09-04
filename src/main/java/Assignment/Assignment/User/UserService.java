@@ -8,12 +8,16 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PaymentRepository paymentRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final UserResponse userResponse = new UserResponse();
+
+    public UserService(UserRepository userRepository, PaymentRepository paymentRepository) {
         this.userRepository = userRepository;
+        this.paymentRepository = paymentRepository;
     }
 
-    public void createUser(User user) {
+    public Object createUser(User user) {
          Optional<User> existEmail = userRepository.findByEmail(user.getEmail());
 
          if(existEmail.isPresent()){
@@ -21,6 +25,16 @@ public class UserService {
          }
 
         userRepository.save(user);
+
+        userResponse.setMsg("Successfully a user created");
+        userResponse.setStatus("200");
+        /*String str = "Name: "+user.getName()+"Email: " +user.getEmail()+
+                " Address: " +user.getAddress()+
+                " Gender: " +user.getGender()+
+                " Dob: "+user.getDob();*/
+        userResponse.setData(user);
+
+         return userResponse;
     }
 
     public List<User> getUser() {
@@ -40,7 +54,13 @@ public class UserService {
         userRepository.updateUser(userId, name, email, address);
     }
 
-    public String show() {
-        return "Done";
+    public Object payment(PaymentInfo paymentInfo) {
+        paymentRepository.save(paymentInfo);
+
+        userResponse.setMsg("Payment Successfull");
+        userResponse.setStatus("200");
+        userResponse.setData(paymentInfo);
+
+        return userResponse;
     }
 }

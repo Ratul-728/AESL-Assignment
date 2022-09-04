@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @RestController
@@ -11,14 +12,18 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    private final UserResponse userResponse = new UserResponse();
+
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping(path = "create-user")
-    public void createUder(@RequestBody User user){
-        userService.createUser(user);
+    public Object createUser(@RequestBody User user){
+        Object obj = userService.createUser(user);
+
+        return obj;
     }
 
     @GetMapping(path = "get-user")
@@ -38,12 +43,13 @@ public class UserController {
                            @RequestParam(required = false) String address){
         userService.updateUser(userId, name, email, address);
     }
+    @PostMapping(path = "payment")
+    public Object paymnet(@RequestBody PaymentInfo paymentInfo){
+        Object paymentObj = userService.payment(paymentInfo);
 
-    @PostMapping(path="show")
-    public String show(){
-        userService.show();
-        return userService.show();
+        return paymentObj;
     }
+
 
 
 }
