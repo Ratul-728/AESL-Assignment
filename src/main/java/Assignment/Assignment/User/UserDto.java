@@ -1,21 +1,24 @@
 package Assignment.Assignment.User;
 
 public class UserDto {
-    String userName;
-    String userDob;
-    String userAddress;
-    String userEmail;
-    String userGender;
+    private String userName;
+    private String userDob;
+    private String userAddress;
+    private String userEmail;
+    private String userGender;
+
+    private String userContact;
 
     public UserDto() {
     }
 
-    public UserDto(String userName, String userDob, String userAddress, String userEmail, String userGender) {
+    public UserDto(String userName, String userDob, String userAddress, String userEmail, String userGender, String userContact) {
         this.userName = userName;
         this.userDob = userDob;
         this.userAddress = userAddress;
         this.userEmail = userEmail;
         this.userGender = userGender;
+        this.userContact = userContact;
     }
 
     public String getUserName() {
@@ -56,5 +59,13 @@ public class UserDto {
 
     public void setUserGender(String userGender) {
         this.userGender = userGender;
+    }
+
+    public String getUserContact() {
+        return userContact;
+    }
+
+    public void setUserContact(String userContact) {
+        this.userContact = userContact;
     }
 }

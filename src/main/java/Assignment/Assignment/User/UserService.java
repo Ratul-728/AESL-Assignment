@@ -2,6 +2,7 @@ package Assignment.Assignment.User;
 
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,8 @@ public class UserService {
         this.paymentRepository = paymentRepository;
     }
 
-    public Object createUser(UserDto userDto) {
+    public UserResponse createUser(UserDto
+                                           userDto) {
          User user = new User();
 
          user.setName(userDto.getUserName());
@@ -25,21 +27,26 @@ public class UserService {
          user.setDob(userDto.getUserDob());
          user.setAddress(userDto.getUserAddress());
          user.setGender(userDto.getUserGender());
+         user.setContact(userDto.getUserContact());
 
-         Optional<User> existEmail = userRepository.findByEmail(user.getEmail());
-
-         if(existEmail.isPresent()){
-             throw new IllegalStateException("Email Exist");
-         }
-
-        userRepository.save(user);
+//         Optional<User> existEmail = userRepository.findByEmail(user.getEmail());
+//
+//         if(existEmail.isPresent()){
+//             throw new IllegalStateException("Email Exist");
+//         }
+        try{
+            userRepository.save(user);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            userResponse.setStatus("500");
+            userResponse.setMsg(e.getMessage());
+            userResponse.setData(null);
+            return userResponse;
+        }
 
         userResponse.setMsg("Successfully a user created");
         userResponse.setStatus("200");
-        /*String str = "Name: "+user.getName()+"Email: " +user.getEmail()+
-                " Address: " +user.getAddress()+
-                " Gender: " +user.getGender()+
-                " Dob: "+user.getDob();*/
         userResponse.setData(userDto);
 
          return userResponse;

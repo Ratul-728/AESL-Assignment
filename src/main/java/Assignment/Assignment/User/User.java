@@ -1,6 +1,9 @@
 package Assignment.Assignment.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table
@@ -19,11 +22,17 @@ public class User {
             generator = "user_sequence"
     )
     private Long id;
+    @NotNull(message = "Name should not be null")
+    @Size(min = 1, max = 45)
     private String name;
     private String dob;
     private String address;
+    @Column(unique = true)
+    @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
     private String gender;
+    @Pattern(regexp = "^\\+8801\\d{9}")
+    private String contact;
 
     enum gender{
         Male,
@@ -35,21 +44,23 @@ public class User {
 
     }
 
-    public User(String name, String dob, String address, String email, String gender) {
+    public User(String name, String dob, String address, String email, String gender, String contact) {
         this.name = name;
         this.dob = dob;
         this.address = address;
         this.email = email;
         this.gender = gender;
+        this.contact = contact;
     }
 
-    public User(Long id, String name, String dob, String address, String email, String gender) {
+    public User(Long id, String name, String dob, String address, String email, String gender, String contact) {
         this.id = id;
         this.name = name;
         this.dob = dob;
         this.address = address;
         this.email = email;
         this.gender = gender;
+        this.contact = contact;
     }
 
     public Long getId() {
@@ -100,6 +111,14 @@ public class User {
         this.gender = gender;
     }
 
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -108,6 +127,7 @@ public class User {
                 ", dob=" + dob +
                 ", email='" + email + '\'' +
                 ", gender=" + gender +
+                ", contact=" + contact +
                 '}';
     }
 }

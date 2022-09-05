@@ -1,12 +1,16 @@
 package Assignment.Assignment.User;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-
+@Validated
 @RestController
 @RequestMapping(path = "/api")
 public class UserController {
