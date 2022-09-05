@@ -3,6 +3,7 @@ package Assignment.Assignment.User;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,7 @@ public class UserService {
         this.paymentRepository = paymentRepository;
     }
 
-    public UserResponse createUser(UserDto
-                                           userDto) {
+    public UserResponse createUser(UserDto userDto) {
          User user = new User();
 
          user.setName(userDto.getUserName());
@@ -28,6 +28,7 @@ public class UserService {
          user.setAddress(userDto.getUserAddress());
          user.setGender(userDto.getUserGender());
          user.setContact(userDto.getUserContact());
+
 
 //         Optional<User> existEmail = userRepository.findByEmail(user.getEmail());
 //

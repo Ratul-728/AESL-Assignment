@@ -1,22 +1,21 @@
 package Assignment.Assignment.User;
 
-import org.hibernate.validator.constraints.NotBlank;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Objects;
 
-@Validated
 @RestController
 @RequestMapping(path = "/api")
 public class UserController {
     private final UserService userService;
 
     private final UserResponse userResponse = new UserResponse();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public UserController(UserService userService) {
@@ -24,8 +23,12 @@ public class UserController {
     }
 
     @PostMapping(path = "create-user")
-    public Object createUser(@RequestBody UserDto userDto){
+    public Object createUser(@RequestBody @Valid UserDto userDto, BindingResult result/*, Model model*/)throws Exception{
 
+        //System.out.println("Result -> "+objectMapper.writeValueAsString(result));
+        if(result.hasErrors()){
+            return result;
+        }
         Object obj = userService.createUser(userDto);
 
         return obj;

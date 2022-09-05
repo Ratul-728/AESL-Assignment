@@ -1,9 +1,15 @@
 package Assignment.Assignment.User;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class UserDto {
+    @NotNull(message = "Name can not be null")
     private String userName;
     private String userDob;
     private String userAddress;
+    @Pattern(message = "Email not valid", regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String userEmail;
     private String userGender;
 

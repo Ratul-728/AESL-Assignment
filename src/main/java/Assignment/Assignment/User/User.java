@@ -22,16 +22,16 @@ public class User {
             generator = "user_sequence"
     )
     private Long id;
-    @NotNull(message = "Name should not be null")
-    @Size(min = 1, max = 45)
+    //@NotNull(message = "Name should not be null")
+    //@Size(min = 1, max = 45)
     private String name;
     private String dob;
     private String address;
-    @Column(unique = true)
-    @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    //@Column(unique = true)
+    //@Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
     private String gender;
-    @Pattern(regexp = "^\\+8801\\d{9}")
+    //@Pattern(regexp = "^\\+8801\\d{9}")
     private String contact;
 
     enum gender{
