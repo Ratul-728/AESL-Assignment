@@ -5,10 +5,13 @@ public class UserResponse {
     private String msg;
     private Object data;
 
-    public UserResponse(String status, String msg, Object data) {
+    private Object errorData;
+
+    public UserResponse(String status, String msg, Object data, Object errorData) {
         this.status = status;
         this.msg = msg;
         this.data = data;
+        this.errorData = errorData;
     }
 
     public UserResponse() {
@@ -37,6 +40,14 @@ public class UserResponse {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public Object getErrorData() {
+        return errorData;
+    }
+
+    public void setErrorData(Object errorData) {
+        this.errorData = errorData;
     }
 
     public void showResponse(){

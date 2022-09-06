@@ -47,8 +47,9 @@ public class UserService {
         }
 
         userResponse.setMsg("Successfully a user created");
-        userResponse.setStatus("200");
+        userResponse.setStatus("Success!");
         userResponse.setData(userDto);
+        userResponse.setErrorData(null);
 
          return userResponse;
     }

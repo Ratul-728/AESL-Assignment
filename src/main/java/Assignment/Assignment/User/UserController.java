@@ -2,12 +2,18 @@ package Assignment.Assignment.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -23,20 +29,35 @@ public class UserController {
     }
 
     @PostMapping(path = "create-user")
-    public Object createUser(@RequestBody @Valid UserDto userDto, BindingResult result/*, Model model*/)throws Exception{
+    public ResponseEntity<Object> createUser(@RequestBody @Valid UserDto userDto, BindingResult result/*, Model model*/){
 
         //System.out.println("Result -> "+objectMapper.writeValueAsString(result));
         if(result.hasErrors()){
-            return result;
-        }
-        Object obj = userService.createUser(userDto);
+            userResponse.setStatus("BAD_REQUEST");
+            userResponse.setMsg("Validation Failed");
+            List<String> errMsg = new ArrayList<>();
+            Map<String, String> map = new HashMap<>();
 
-        return obj;
+            for (int i = 0; i < result.getAllErrors().size(); i++) {
+                //errMsg.add(result.getAllErrors().get(i).getDefaultMessage());
+                map.put(result.getFieldErrors().get(i).getField(),result.getAllErrors().get(i).getDefaultMessage());
+            }
+            userResponse.setErrorData(map);
+            userResponse.setData(null);
+            return ResponseEntity.badRequest()
+                    .body(userResponse);
+            //return userResponse;
+        }
+        UserResponse response = userService.createUser(userDto);
+        return ResponseEntity.accepted()
+                .body(response);
+        //return obj;
     }
 
     @GetMapping(path = "get-user")
-    public List<User> getUser(){
-        return userService.getUser();
+    public ResponseEntity<List<User>> getUser(){
+        //return userService.getUser();
+        return ResponseEntity.accepted().body(userService.getUser());
     }
 
     @DeleteMapping(path = "delete-user/{userId}")
@@ -57,7 +78,15 @@ public class UserController {
 
         return paymentObj;
     }
-
-
+    @GetMapping("/age")
+    ResponseEntity<String> age(@RequestParam int yearOfBirth){
+        if(yearOfBirth > 2022){
+            return ResponseEntity.badRequest().header("Bad-Request-Header", "Bad").body("You don't have time machine fool");
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Custom-Header", "Foo");
+        //return new ResponseEntity<>("Your Age is: "+(2022-yearOfBirth), headers,HttpStatus.ACCEPTED);
+        return ResponseEntity.ok().body("Yor age is: "+(2022-yearOfBirth));
+    }
 
 }

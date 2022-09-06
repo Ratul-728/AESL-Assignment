@@ -27,8 +27,9 @@ public class User {
     private String name;
     private String dob;
     private String address;
-    //@Column(unique = true)
+
     //@Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    @Column(unique = true)
     private String email;
     private String gender;
     //@Pattern(regexp = "^\\+8801\\d{9}")
