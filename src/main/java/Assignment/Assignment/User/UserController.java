@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping(path = "create-user")
-    public ResponseEntity<Object> createUser(@RequestBody @Valid UserDto userDto, BindingResult result/*, Model model*/){
+    public ResponseEntity<?> createUser(@RequestBody @Valid UserDto userDto, BindingResult result/*, Model model*/){
 
         //System.out.println("Result -> "+objectMapper.writeValueAsString(result));
         if(result.hasErrors()){
@@ -40,7 +40,8 @@ public class UserController {
 
             for (int i = 0; i < result.getAllErrors().size(); i++) {
                 //errMsg.add(result.getAllErrors().get(i).getDefaultMessage());
-                map.put(result.getFieldErrors().get(i).getField(),result.getAllErrors().get(i).getDefaultMessage());
+                map.put(result.getFieldErrors().get(i).getField()
+                        ,result.getAllErrors().get(i).getDefaultMessage());
             }
             userResponse.setErrorData(map);
             userResponse.setData(null);
@@ -57,24 +58,26 @@ public class UserController {
     @GetMapping(path = "get-user")
     public ResponseEntity<List<User>> getUser(){
         //return userService.getUser();
-        return ResponseEntity.accepted().body(userService.getUser());
+        return ResponseEntity.accepted()
+                .body(userService.getUser());
     }
 
     @DeleteMapping(path = "delete-user/{userId}")
-    public void deleteUser(@PathVariable("userId") Long userId){
-        userService.deleteUser(userId);
+    public ResponseEntity<?> deleteUser(@PathVariable("userId") Long userId){
+        return userService.deleteUser(userId);
     }
 
     @PutMapping(path = "update-user/{userId}")
-    public void updateUser(@PathVariable("userId") Long userId,
+    public ResponseEntity<?> updateUser(@PathVariable("userId") Long userId,
                            @RequestParam(required = false) String name,
                            @RequestParam(required = false) String email,
                            @RequestParam(required = false) String address){
-        userService.updateUser(userId, name, email, address);
+        Object obj = userService.updateUser(userId, name, email, address);
+        return ResponseEntity.accepted().body(obj);
     }
     @PostMapping(path = "payment")
-    public Object paymnet(@RequestBody PaymentInfo paymentInfo){
-        Object paymentObj = userService.payment(paymentInfo);
+    public ResponseEntity<?> paymnet(@RequestBody PaymentInfo paymentInfo){
+        ResponseEntity paymentObj = userService.payment(paymentInfo);
 
         return paymentObj;
     }

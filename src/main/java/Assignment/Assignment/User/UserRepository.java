@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public interface UserRepository extends JpaRepository <User, Long> {
     @Transactional
     @Modifying
     @Query("UPDATE User set name = :name, email = :email, address = :address WHERE id = :userId")
-    void updateUser(@Param("userId") Long userId,
+    int updateUser(@Param("userId") Long userId,
                     @Param("name") String name,
                     @Param("email") String email,
                     @Param("address") String address);

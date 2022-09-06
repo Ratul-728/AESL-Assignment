@@ -1,6 +1,8 @@
 package Assignment.Assignment.User;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
@@ -40,7 +42,7 @@ public class UserService {
         }
         catch(Exception e){
             e.printStackTrace();
-            userResponse.setStatus("500");
+            userResponse.setStatus("BAD_REQUEST");
             userResponse.setMsg(e.getMessage());
             userResponse.setData(null);
             return userResponse;
@@ -58,26 +60,69 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void deleteUser(Long userId) {
+    public ResponseEntity<?> deleteUser(Long userId) {
         boolean existuser = userRepository.existsById(userId);
         if(!existuser){
-            throw new IllegalStateException("User doesn't found");
+            userResponse.setStatus("BAD_REQUEST");
+            userResponse.setMsg("User not found");
+            userResponse.setErrorData("UserID not found");
+            userResponse.setData(null);
+            return ResponseEntity.badRequest().body(userResponse);
+        }
+        userResponse.setStatus("GOOD_REQUEST");
+        userResponse.setMsg("User deleted Successfully");
+        userResponse.setErrorData(null);
+        userResponse.setData(null);
+
+        try{
+            userRepository.deleteById(userId);
+        }catch (Exception e){
+            userResponse.setStatus("BAD_REQUEST");
+            userResponse.setMsg(e.getMessage());
+            userResponse.setErrorData(e.getCause());
+            userResponse.setData(null);
+
+            return ResponseEntity.badRequest().body(userResponse);
         }
 
-        userRepository.deleteById(userId);
+        return ResponseEntity.accepted().body(userResponse);
     }
 
-    public void updateUser(Long userId, String name, String email, String address) {
-        userRepository.updateUser(userId, name, email, address);
-    }
+    public UserResponse updateUser(Long userId, String name, String email, String address) {
 
-    public Object payment(PaymentInfo paymentInfo) {
-        paymentRepository.save(paymentInfo);
-
-        userResponse.setMsg("Payment Successfull");
-        userResponse.setStatus("200");
-        userResponse.setData(paymentInfo);
-
+        int check =  userRepository.updateUser(userId, name, email, address);
+        if(check == 0){
+            userResponse.setStatus("BAD_REQUEST");
+            userResponse.setMsg("User Updated Not Successfully!");
+            userResponse.setData(null);
+            userResponse.setErrorData("User not found");
+        }else{
+            userResponse.setStatus("GOOD_REQUEST");
+            userResponse.setMsg("User Updated Successfully!");
+            userResponse.setData(null);
+            userResponse.setErrorData(null);
+        }
         return userResponse;
+    }
+
+    public ResponseEntity payment(PaymentInfo paymentInfo) {
+        try{
+            paymentRepository.save(paymentInfo);
+
+        }catch (Exception e){
+            userResponse.setErrorData(e.getMessage());
+            userResponse.setMsg("Payment Decline");
+            userResponse.setStatus("BAD_REQUEST");
+            userResponse.setData(null);
+
+            return ResponseEntity.badRequest().body(userResponse);
+        }
+
+        userResponse.setMsg("Payment Successfully");
+        userResponse.setStatus("GOOD_REQUEST");
+        userResponse.setData(paymentInfo);
+        userResponse.setErrorData(null);
+
+        return ResponseEntity.accepted().body(userResponse);
     }
 }
