@@ -1,5 +1,6 @@
 package Assignment.Assignment.User;
 
+import Assignment.Assignment.userException.ApiRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -45,8 +46,10 @@ public class UserController {
             }
             userResponse.setErrorData(map);
             userResponse.setData(null);
-            return ResponseEntity.badRequest()
-                    .body(userResponse);
+            throw new ApiRequestException(result.getAllErrors().get(0).getDefaultMessage());
+            //throw new IllegalStateException("Throw with IllegalStatement");
+            //return ResponseEntity.badRequest()
+                    //.body(userResponse);
             //return userResponse;
         }
         UserResponse response = userService.createUser(userDto);
