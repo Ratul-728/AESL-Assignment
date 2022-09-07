@@ -30,28 +30,28 @@ public class UserController {
     }
 
     @PostMapping(path = "create-user")
-    public ResponseEntity<?> createUser(@RequestBody @Valid UserDto userDto, BindingResult result/*, Model model*/){
+    public ResponseEntity<?> createUser(@RequestBody @Valid UserDto userDto){
 
-        //System.out.println("Result -> "+objectMapper.writeValueAsString(result));
-        if(result.hasErrors()){
-            userResponse.setStatus("BAD_REQUEST");
-            userResponse.setMsg("Validation Failed");
-            List<String> errMsg = new ArrayList<>();
-            Map<String, String> map = new HashMap<>();
-
-            for (int i = 0; i < result.getAllErrors().size(); i++) {
-                //errMsg.add(result.getAllErrors().get(i).getDefaultMessage());
-                map.put(result.getFieldErrors().get(i).getField()
-                        ,result.getAllErrors().get(i).getDefaultMessage());
-            }
-            userResponse.setErrorData(map);
-            userResponse.setData(null);
-            //throw new ApiRequestException(result.getAllErrors().get(0).getDefaultMessage());
-            //throw new IllegalStateException("Throw with IllegalStatement");
-            //return ResponseEntity.badRequest()
-                    //.body(userResponse);
-            //return userResponse;
-        }
+//        System.out.println("Result -> "+result.getAllErrors());
+//        if(result.hasErrors()){
+//            userResponse.setStatus("BAD_REQUEST");
+//            userResponse.setMsg("Validation Failed");
+//            List<String> errMsg = new ArrayList<>();
+//            Map<String, String> map = new HashMap<>();
+//
+//            for (int i = 0; i < result.getAllErrors().size(); i++) {
+//                //errMsg.add(result.getAllErrors().get(i).getDefaultMessage());
+//                map.put(result.getFieldErrors().get(i).getField()
+//                        ,result.getAllErrors().get(i).getDefaultMessage());
+//            }
+//            userResponse.setErrorData(map);
+//            userResponse.setData(null);
+//            //throw new ApiRequestException(result.getAllErrors().get(0).getDefaultMessage());
+//            //throw new IllegalStateException("Throw with IllegalStatement");
+//            //return ResponseEntity.badRequest()
+//                    //.body(userResponse);
+//            //return userResponse;
+//        }
         UserResponse response = userService.createUser(userDto);
         return ResponseEntity.accepted()
                 .body(response);
