@@ -2,10 +2,7 @@ package Assignment.Assignment.User;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,5 +121,30 @@ public class UserService {
         userResponse.setErrorData(null);
 
         return ResponseEntity.accepted().body(userResponse);
+    }
+
+    public ResponseEntity getUserById(Long userId) {
+        boolean existuser = userRepository.existsById(userId);
+        if(!existuser){
+            userResponse.setStatus("BAD_REQUEST");
+            userResponse.setMsg("User not found");
+            userResponse.setErrorData("UserID not found");
+            userResponse.setData(null);
+            return ResponseEntity.badRequest().body(userResponse);
+        }else{
+            try{
+                Optional<User> userById = userRepository.findById(userId);
+                userResponse.setStatus("GOOD_REQUEST");
+                userResponse.setMsg("User found");
+                userResponse.setErrorData(null);
+                userResponse.setData(userById);
+                return ResponseEntity.accepted().body(userResponse);
+
+            }catch (Exception e){
+                throw new IllegalStateException("Something went wrong!");
+
+            }
+        }
+
     }
 }

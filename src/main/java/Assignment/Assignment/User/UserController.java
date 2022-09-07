@@ -1,6 +1,6 @@
 package Assignment.Assignment.User;
 
-import Assignment.Assignment.userException.ApiRequestException;
+//import Assignment.Assignment.userException.ApiRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -46,7 +46,7 @@ public class UserController {
             }
             userResponse.setErrorData(map);
             userResponse.setData(null);
-            throw new ApiRequestException(result.getAllErrors().get(0).getDefaultMessage());
+            //throw new ApiRequestException(result.getAllErrors().get(0).getDefaultMessage());
             //throw new IllegalStateException("Throw with IllegalStatement");
             //return ResponseEntity.badRequest()
                     //.body(userResponse);
@@ -63,6 +63,11 @@ public class UserController {
         //return userService.getUser();
         return ResponseEntity.accepted()
                 .body(userService.getUser());
+    }
+    @GetMapping(path = "get-user-by-id/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable("userId") Long userId){
+        ResponseEntity response = userService.getUserById(userId);
+        return ResponseEntity.accepted().body(response);
     }
 
     @DeleteMapping(path = "delete-user/{userId}")
