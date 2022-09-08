@@ -1,9 +1,6 @@
 package Assignment.Assignment.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table
@@ -28,12 +25,22 @@ public class User {
     private String dob;
     private String address;
 
+    private String password;
+
     //@Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     @Column(unique = true)
     private String email;
     private String gender;
     //@Pattern(regexp = "^\\+8801\\d{9}")
     private String contact;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     enum gender{
         Male,
@@ -45,20 +52,22 @@ public class User {
 
     }
 
-    public User(String name, String dob, String address, String email, String gender, String contact) {
+    public User(String name, String dob, String address, String password, String email, String gender, String contact) {
         this.name = name;
         this.dob = dob;
         this.address = address;
+        this.password = password;
         this.email = email;
         this.gender = gender;
         this.contact = contact;
     }
 
-    public User(Long id, String name, String dob, String address, String email, String gender, String contact) {
+    public User(Long id, String name, String dob, String address, String password, String email, String gender, String contact) {
         this.id = id;
         this.name = name;
         this.dob = dob;
         this.address = address;
+        this.password = password;
         this.email = email;
         this.gender = gender;
         this.contact = contact;
@@ -129,6 +138,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", gender=" + gender +
                 ", contact=" + contact +
+                ", contact=" + password +
                 '}';
     }
 }

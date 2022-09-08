@@ -27,6 +27,7 @@ public class UserService {
          user.setAddress(userDto.getUserAddress());
          user.setGender(userDto.getUserGender());
          user.setContact(userDto.getUserContact());
+         user.setPassword(userDto.getUserPassword());
 
 
 //         Optional<User> existEmail = userRepository.findByEmail(user.getEmail());

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,26 @@ public class UserExceptionHandler {
         userResponse.setData(null);
         return ResponseEntity.badRequest().body(userResponse);
     }
+
+    @ExceptionHandler({SQLIntegrityConstraintViolationException.class})
+    public ResponseEntity<Object> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setErrorData(ex.getMessage());
+        userResponse.setMsg("Method Argument Type Mismatch Exception");
+        userResponse.setStatus(ex.getLocalizedMessage());
+        userResponse.setData(null);
+        return ResponseEntity.badRequest().body(userResponse);
+    }
+
+//    @ExceptionHandler({SQL.class})
+//    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
+//        UserResponse userResponse = new UserResponse();
+//        userResponse.setErrorData(ex.getMessage());
+//        userResponse.setMsg("Method Argument Type Mismatch Exception");
+//        userResponse.setStatus(ex.getLocalizedMessage());
+//        userResponse.setData(null);
+//        return ResponseEntity.badRequest().body(userResponse);
+//    }
 
 
 }
